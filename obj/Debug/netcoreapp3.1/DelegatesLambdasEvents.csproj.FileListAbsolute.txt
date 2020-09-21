@@ -1,0 +1,13 @@
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.exe
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.deps.json
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.runtimeconfig.json
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.runtimeconfig.dev.json
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.dll
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\bin\Debug\netcoreapp3.1\DelegatesLambdasEvents.pdb
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.csprojAssemblyReference.cache
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.AssemblyInfoInputs.cache
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.AssemblyInfo.cs
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.csproj.CoreCompileInputs.cache
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.dll
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.pdb
+C:\Users\Tomasz.Pawlak\source\repos\DelegatesLambdasEvents\obj\Debug\netcoreapp3.1\DelegatesLambdasEvents.genruntimeconfig.cache
