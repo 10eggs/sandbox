@@ -144,39 +144,60 @@ namespace DelegatesLambdasEvents
                 Console.WriteLine("Result from generic chain: " + i);
             }
 
-            //static IEnumerable<TArgs> InvokeLambdasFromAFuncDelegate<TArgs,TReturn>(Func<TArgs,TReturn> func)
-            //{
-            //    foreach(Func<TArgs,TReturn> f in func.GetInvocationList())
-            //        {
-            //            yield return f();
-            //        }
-                
+            static IEnumerable<TReturn> InvokeLambdasFromAFuncDelegate<TArgs, TReturn>(Func<TArgs, TReturn> func, TArgs number)
+            {
+                foreach (Func<TArgs, TReturn> f in func.GetInvocationList())
+                {
+                    yield return f(number);
+                }
 
-            //}
 
-        /**
-         * Func and Action
-         */
-        Console.WriteLine("***************");
+            }
+
+            /**
+             * Func and Action
+             */
+            Console.WriteLine("***************");
             Console.WriteLine("Func and Action delegates");
 
-            Func<int> ActionChain = returnSixteen;
+            Func<int> FuncChain = returnSixteen;
             Func<int, bool> TakeIntReturnBool = null;
+
+
             TakeIntReturnBool += (n) => n > 30;
             TakeIntReturnBool += (n) => n < 50;
 
 
-            ActionChain += returnSixty;
-            ActionChain += () => 666;
-            ActionChain += () => 69;
+            FuncChain+= returnSixty;
+            FuncChain += () => 666;
+            FuncChain += () => 69;
             static int returnSixteen() { return 16; }
             static int returnSixty() { return 60; }
             
-            resultsForGenericChain = InvokeFuncChain<int>(ActionChain);
+
+            resultsForGenericChain = InvokeFuncChain<int>(FuncChain);
             foreach (int i in resultsForGenericChain)
             {
                 Console.WriteLine("Result from generic chain: " + i);
             }
+            //IEnumerable<bool> tableOfTruth= InvokeLambdasFromAFuncDelegate<int, bool>(TakeIntReturnBool, 60);
+            //foreach(bool b in tableOfTruth)
+            //{
+            //    Console.WriteLine("Table of truth says: " + b);
+            //}
+
+            //We can use something else
+            foreach (bool b in InvokeLambdasFromAFuncDelegate(TakeIntReturnBool, 60))
+            {
+                Console.WriteLine("Table of truth says: " + b);
+            };
+
+            //Annonymous Methods
+            Func<int, bool> f = delegate (int i) { return i > 10; };
+            Console.WriteLine("Anonymous method: " + f(30));
+
+
+            //Closures
 
 
         }
