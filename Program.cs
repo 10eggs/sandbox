@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
 
 namespace DelegatesLambdasEvents
 {
@@ -399,6 +401,49 @@ namespace DelegatesLambdasEvents
             //Invalid line, return type is not specific
             //RetDerObj = ReturnBase;
             RetDerObj = ReturnDerived;
+
+
+            //Extension methods
+            DateTime MartasBday = DateTime.Parse("14/10/2020");
+            DateTime time = DateTime.Parse("10:00pm");
+
+            DateTime combined1 = ExtensionMethods.Combine(MartasBday, time);
+            DateTime combined2 = MartasBday.Combine(time);
+
+            Console.WriteLine("Made from two args: " + combined1);
+            Console.WriteLine("Made from extension method invoked from datetime object: " + combined2);
+
+            //LINQ Introduction
+
+            int[] numbers = new[] { 3, 4, 5, 10, 23, 333 };
+            var result =
+                   from n in numbers
+                   where n % 2 == 0
+                   select n;
+            var resultsFromMethod =
+                numbers.Where(n => n > 10)
+                .Select(n => n);
+
+            var results =
+                Enumerable.Select(
+                    Enumerable.Where(numbers, n => n > 10),
+                    n=>n);
+
+            var resultsFromMyExtension =
+                numbers.Where(n => n>0)
+                .Select(n => n);
+
+
+            foreach(var res in results)
+            {
+                Console.WriteLine("Result: " + res);
+            }
+
+            foreach (var res in resultsFromMyExtension)
+            {
+                Console.WriteLine("Result: " + res);
+            }
+
 
 
         }
