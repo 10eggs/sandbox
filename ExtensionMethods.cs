@@ -21,5 +21,18 @@ namespace DelegatesLambdasEvents
                 }
                     
         }
+
+        public static IEnumerable<T> Where<T>(this IEnumerable<T> items, Func<T,bool> gauntlet)
+        {
+            foreach (T item in items)
+                if (gauntlet(item))
+                    yield return item;
+        }
+
+        //public static IEnumerable<T> Select<T,R>(this IEnumerable<T> items, Func<T,R> transform)
+        //{
+        //    foreach(T item in items)
+        //        yield return transform
+        //}
     }
 }
