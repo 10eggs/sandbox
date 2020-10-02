@@ -430,10 +430,11 @@ namespace DelegatesLambdasEvents
                     n=>n);
 
             var resultsFromMyExtension =
-                numbers.Where(n => n>0)
-                .Select(n => n);
+                numbers.Where(n => n > 0);
+                //We are able to omit this Select clause
+                //.Select(n => n);
 
-
+   
             foreach(var res in results)
             {
                 Console.WriteLine("Result: " + res);
@@ -444,6 +445,7 @@ namespace DelegatesLambdasEvents
                 Console.WriteLine("Result: " + res);
             }
 
+            //Deferred execution
 
 
         }
