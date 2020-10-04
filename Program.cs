@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using System.Reflection;
 
 namespace DelegatesLambdasEvents
 {
@@ -90,6 +91,8 @@ namespace DelegatesLambdasEvents
         {
             Console.WriteLine("I'm my method and I was assigned to MyDelegate");
         }
+
+        static Random Random = new Random();
 
 
         string ReturnName(string name)
@@ -445,12 +448,147 @@ namespace DelegatesLambdasEvents
                 Console.WriteLine("Result: " + res);
             }
 
-            //Deferred execution
+            Console.WriteLine("***************************");
+            Console.WriteLine("***************************");
+            Console.WriteLine("***************************");
+            Console.WriteLine("***************************");
 
+            //Dependency injection
+
+            //Create an instance of a class using Activator class 
+            var msgService = new MessageService();
+            //var serviceByActivator =(HelloService)Activator.CreateInstance(typeof(HelloService));
+            //There is no parameterless constructor, so need to pass ct arg to CreateInstance method
+            var consumerByActivator = (ServiceConsumer)Activator.CreateInstance(typeof(ServiceConsumer),((HelloService)Activator.CreateInstance(typeof(HelloService),msgService)));
+
+            //foreach(Object o in typeof(ServiceConsumer).GetConstructors())
+            //{
+            //    ConstructorInfo c = (ConstructorInfo)o;
+            //    var par= c.GetParameters();
+            //    foreach (Object x in par)
+            //    {
+            //        Console.WriteLine(x);
+            //    }
+            //}
+
+            var singleConstructor = typeof(ServiceConsumer).GetConstructors().Single();
+
+            var type = typeof(HelloService);
+
+            //serviceByActivator.Print();
+
+            var container = new DependencyContainer();
+
+            container.AddTransient<HelloService>();
+            container.AddTransient<ServiceConsumer>();
+            container.AddSingleton<MessageService>();
+
+            Console.WriteLine("Count for dependencies: " + container._dependencies.Count);
+
+
+            var resolver = new DependencyResolver(container);
+
+            var consumer1 = resolver.GetService<ServiceConsumer>();
+            var consumer2 = resolver.GetService<ServiceConsumer>();
+            var consumer3 = resolver.GetService<ServiceConsumer>();
+            consumer1.Print();
+            consumer2.Print();
+            consumer3.Print();
+            //var resolvedService = resolver.GetService<ServiceConsumer>();
+
+            Console.WriteLine("*****************************");
+            Console.WriteLine("*****************************");
+            Console.WriteLine("*****************************");
+            /**
+             *      YIELD KEYWORD
+             */
+            //Syntactic sugar explanation
+
+            foreach (int i in Program.GetRandomNumbers(10))
+            {
+                Console.WriteLine("MY RANDOM NUMBER: " + i);
+            }
+
+            foreach (int i in Numbers)
+            {
+                Console.WriteLine(i);
+            }
 
         }
+        static IEnumerable<int> GetRandomNumbers(int count)
+        {
+            GetRandomNumberClass ret = new GetRandomNumberClass();
+            ret.count = count;
 
+            return ret;
+        }
 
+        public static IEnumerable<int> Numbers
+        {
+            get
+            {
+                Console.WriteLine("Start");
+                Console.WriteLine("Return 3");
+                yield return 3;
+                Console.WriteLine("Return 5");
+                yield return 5;
+                Console.WriteLine("Return 66");
+                yield return 66;
+                Console.WriteLine("This blocked was called after last invocation of yield return - now it's finished");
+            }
+        }
+        class GetRandomNumberClass : IEnumerable<int>, IEnumerator<int>
+        {
+            public int count;
+            public int i;
+            public int current;
+            int state;
+
+            public int Current
+            {
+                get { return current; }
+            }
+            public bool MoveNext()
+            {
+                switch (state)
+                {
+                    //Initialization of for loop
+                    case 0:
+                        i = 0;
+                        goto case 1;
+                    case 1:
+                        state = 1;
+                        if (!(i < count))
+                            return false;
+                        current = Program.Random.Next();
+                        state = 2;
+                        return true;
+                    case 2:
+                        i++;
+                        goto case 1;
+                }
+                return false;
+            }
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            public IEnumerator<int> GetEnumerator()
+            {
+                //Return itself, cause this class implement IEnumerator interface
+                return this;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                //It wont call itself recursively, at first it will looking for method which is not implemented explicitly
+                return GetEnumerator();
+            }
+            public void Reset(){}
+            public void Dispose() { }
+
+        }
 
     }
 }
