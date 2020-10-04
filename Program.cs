@@ -509,11 +509,19 @@ namespace DelegatesLambdasEvents
                 Console.WriteLine("MY RANDOM NUMBER: " + i);
             }
 
-            foreach (int i in Numbers)
+            foreach (int i in HybridNumbers)
             {
                 Console.WriteLine(i);
             }
 
+            //Desugarized foreach loop
+            IEnumerable<int> Desugarized = HybridNumbers;
+            IEnumerator rator = HybridNumbers.GetEnumerator();
+            while (rator.MoveNext())
+            {
+                Console.WriteLine("Desugarized foreach loop!");
+                Console.WriteLine(rator.Current);
+            }
         }
         static IEnumerable<int> GetRandomNumbers(int count)
         {
@@ -536,6 +544,71 @@ namespace DelegatesLambdasEvents
                 yield return 66;
                 Console.WriteLine("This blocked was called after last invocation of yield return - now it's finished");
             }
+        }
+
+        public static IEnumerable<int> HybridNumbers
+        {
+            get { return new NumberHybrid(); }
+        }
+        class NumberHybrid : IEnumerable<int>, IEnumerator<int>
+        {
+            int state;
+            int current;
+            public int Current
+            {
+                get { return current; }
+            }
+            public bool MoveNext()
+            {
+                switch (state)
+                {
+                    case 0:
+                        Console.WriteLine("Start");
+                        Console.WriteLine("Yield 3");
+                        current = 3;
+                        state = 1;
+                        break;
+                    case 1:
+                        Console.WriteLine("Yield 5");
+                        state = 2;
+                        current = 5;
+                        break;
+                    case 2:
+                        Console.WriteLine("Yield 13");
+                        current = 13;
+                        state = 3;
+                        break;
+                    case 3:
+                        Console.WriteLine("End!");
+                        return false;
+
+                }
+
+                return true;
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+            public IEnumerator<int> GetEnumerator()
+            {
+                return this;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public void Dispose()
+            {
+            }
+
+            public void Reset()
+            {
+            }
+
         }
         class GetRandomNumberClass : IEnumerable<int>, IEnumerator<int>
         {
