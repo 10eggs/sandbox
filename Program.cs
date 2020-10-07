@@ -430,15 +430,15 @@ namespace DelegatesLambdasEvents
             var results =
                 Enumerable.Select(
                     Enumerable.Where(numbers, n => n > 10),
-                    n=>n);
+                    n => n);
 
             var resultsFromMyExtension =
                 numbers.Where(n => n > 0);
-                //We are able to omit this Select clause
+            //We are able to omit this Select clause
                 //.Select(n => n);
 
-   
-            foreach(var res in results)
+
+            foreach (var res in results)
             {
                 Console.WriteLine("Result: " + res);
             }
@@ -453,13 +453,21 @@ namespace DelegatesLambdasEvents
             Console.WriteLine("***************************");
             Console.WriteLine("***************************");
 
+            Console.WriteLine("DEFERRED EXECUTION!!!!");
+            int[] randomNumbers = { 1, 2, 3, 4, 5, 6, 11, 12, 15 };
+
+
+            //Due to some reason it doesnt work
+            //var results = randomNumbers.Where(t => t > 5).Select(t => t);
+
+
             //Dependency injection
 
             //Create an instance of a class using Activator class 
-            var msgService = new MessageService();
+            //var msgService = new MessageService();
             //var serviceByActivator =(HelloService)Activator.CreateInstance(typeof(HelloService));
             //There is no parameterless constructor, so need to pass ct arg to CreateInstance method
-            var consumerByActivator = (ServiceConsumer)Activator.CreateInstance(typeof(ServiceConsumer),((HelloService)Activator.CreateInstance(typeof(HelloService),msgService)));
+            //var consumerByActivator = (ServiceConsumer)Activator.CreateInstance(typeof(ServiceConsumer),((HelloService)Activator.CreateInstance(typeof(HelloService),msgService)));
 
             //foreach(Object o in typeof(ServiceConsumer).GetConstructors())
             //{
@@ -471,7 +479,7 @@ namespace DelegatesLambdasEvents
             //    }
             //}
 
-            var singleConstructor = typeof(ServiceConsumer).GetConstructors().Single();
+            //var singleConstructor = typeof(ServiceConsumer).GetConstructors().Single();
 
             var type = typeof(HelloService);
 
