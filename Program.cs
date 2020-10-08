@@ -530,6 +530,40 @@ namespace DelegatesLambdasEvents
                 Console.WriteLine("Desugarized foreach loop!");
                 Console.WriteLine(rator.Current);
             }
+
+            //Grouping
+
+            List<Customer> customers = new List<Customer>
+            {
+                new Customer { Country = "Poland", Name = "Tomek", Age = 21},
+                new Customer { Country = "Poland", Name = "Mateusz", Age = 18},
+                new Customer { Country = "Poland", Name = "Agata", Age = 27},
+                new Customer { Country = "UK", Name = "Raheel", Age = 25},
+                new Customer { Country = "UK", Name = "Luke", Age = 48},
+                new Customer { Country = "UK", Name = "Steve", Age = 77},
+                new Customer { Country = "Russia", Name = "Nikita", Age = 20},
+                new Customer { Country = "Argentina", Name = "Domminica", Age = 16},
+                new Customer { Country = "Argentina", Name = "RichBich", Age = 33},
+                new Customer { Country = "Israel", Name = "JesusChristus", Age = 600},
+                new Customer { Country = "Moldovia", Name = "Siergiej", Age = 40},
+            };
+
+            foreach(Customer c in customers.OrderBy(c => c.Country))
+            {
+                Console.WriteLine(c.Country + ":" + c.Name);
+            }
+
+            var customersGroupedByCountry = customers.GroupBy(c => c.Country).OrderByDescending(g=>g.Count());
+            Console.WriteLine("Time for grouping: ");
+            foreach(IGrouping<string,Customer> g in customersGroupedByCountry)
+            {
+                Console.WriteLine("Group name: " + g.Key);
+                foreach(Customer c in g)
+                {
+                    Console.WriteLine("Name: " + c.Name);
+                }
+            }
+
         }
         static IEnumerable<int> GetRandomNumbers(int count)
         {
