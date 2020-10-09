@@ -564,6 +564,62 @@ namespace DelegatesLambdasEvents
                 }
             }
 
+            var useLetType =
+                from g in customersGroupedByCountry
+                    //introduce variable to query
+                let count = g.Count()
+                orderby count descending
+                //Return new anon type
+                select new { Country = g.Key, NumCustomers = count };
+
+
+            var withoutLetKeyword =
+                customersGroupedByCountry.Select(g => new { g, NumCustomers = g.Count() })
+                .OrderBy(at => at.NumCustomers)
+                .Select(at => new { at.g.Key, at.NumCustomers });
+
+
+
+            //Introduce INTO keyword
+            //Selecting (Projecting) While Grouping
+            //purplemath.com QUADRATIC FORMULA
+            var selectingWhileGrouping=customers.GroupBy(g => new { g.Country }, g => g);
+            foreach(var g in selectingWhileGrouping)
+            {
+                Console.WriteLine(g.Key+": ");
+                foreach(Customer c in g)
+                {
+                    Console.WriteLine(c.Name + ": " + c.Age);
+                }
+            }
+
+            //Let Clauses And Even Deeper Transparent Identifiers
+            var inputs = new[]
+            {
+                new { a=1, b=2, c=3 },
+                new { a=2, b=9, c=4 },
+                new{ a=7, b=3, c=6}
+            };
+            //Two approaches
+            //First
+            var roots =
+                from coef in inputs
+                let negB = -coef.b
+                let discriminant = coef.b * coef.b - 4 * coef.a * coef.c
+                let twoA = 2 * coef.a
+                select new
+                {
+                    FirstRoot = (negB + discriminant) / twoA,
+                    SecondRoot = (negB - discriminant) / twoA
+                };
+
+            //Second
+            var rootsByExtensions =
+                inputs
+                .Select(coef => new { coef, negB = -coef.b })
+                .Select(t1 => new { t1, discriminant = t1.coef.b * t1.coef.b - 4 * t1.coef.a * t1.coef.c })
+                .Select(t2 => new { t2, twoA = 2 * t2.t1.coef.a })
+                .Select(t3 => new { FirstRoot = (t3.t2.t1.negB + t3.t2.discriminant) / t3.twoA, SecondRoot = (t3.t2.t1.negB - t3.t2.discriminant) / t3.twoA });
         }
         static IEnumerable<int> GetRandomNumbers(int count)
         {
