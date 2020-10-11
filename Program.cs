@@ -535,20 +535,46 @@ namespace DelegatesLambdasEvents
 
             List<Customer> customers = new List<Customer>
             {
-                new Customer { Country = "Poland", Name = "Tomek", Age = 21},
-                new Customer { Country = "Poland", Name = "Mateusz", Age = 18},
-                new Customer { Country = "Poland", Name = "Agata", Age = 27},
-                new Customer { Country = "UK", Name = "Raheel", Age = 25},
-                new Customer { Country = "UK", Name = "Luke", Age = 48},
-                new Customer { Country = "UK", Name = "Steve", Age = 77},
-                new Customer { Country = "Russia", Name = "Nikita", Age = 20},
-                new Customer { Country = "Argentina", Name = "Domminica", Age = 16},
-                new Customer { Country = "Argentina", Name = "RichBich", Age = 33},
-                new Customer { Country = "Israel", Name = "JesusChristus", Age = 600},
-                new Customer { Country = "Moldovia", Name = "Siergiej", Age = 40},
+                new Customer { CustomerID="1", Country = "Poland", Name = "Tomek", Age = 21},
+                new Customer { CustomerID="2", Country = "Poland", Name = "Mateusz", Age = 18},
+                new Customer { CustomerID="3", Country = "Poland", Name = "Agata", Age = 27},
+                new Customer { CustomerID="4", Country = "UK", Name = "Raheel", Age = 25},
+                new Customer { CustomerID="5", Country = "UK", Name = "Luke", Age = 48},
+                new Customer { CustomerID="6", Country = "UK", Name = "Steve", Age = 77},
+                new Customer { CustomerID="7", Country = "Russia", Name = "Nikita", Age = 20},
+                new Customer { CustomerID="8", Country = "Argentina", Name = "Domminica", Age = 16},
+                new Customer { CustomerID="9", Country = "Argentina", Name = "RichBich", Age = 33},
+                new Customer { CustomerID="10", Country = "Israel", Name = "JesusChristus", Age = 600},
+                new Customer { CustomerID="11", Country = "Moldovia", Name = "Siergiej", Age = 40},
             };
 
-            foreach(Customer c in customers.OrderBy(c => c.Country))
+            List<Order> orders = new List<Order>
+            {
+                new Order { OrderID=1, CustomerID="1", OrderDate=new DateTime(2020,10,1), ShipCountry="Malysia" },
+                new Order { OrderID=2, CustomerID="1", OrderDate=new DateTime(2020,10,3), ShipCountry="Malysia" },
+                new Order { OrderID=3, CustomerID="1", OrderDate=new DateTime(2020,10,17), ShipCountry="Malysia" },
+                new Order { OrderID=4, CustomerID="2", OrderDate=new DateTime(2020,10,22), ShipCountry="Malysia" },
+                new Order { OrderID=5, CustomerID="3", OrderDate=new DateTime(2020,10,5), ShipCountry="Malysia" },
+                new Order { OrderID=6, CustomerID="4", OrderDate=new DateTime(2020,10,4), ShipCountry="Malysia" },
+                new Order { OrderID=7, CustomerID="5", OrderDate=new DateTime(2020,10,4), ShipCountry="Malysia" },
+                new Order { OrderID=8, CustomerID="5", OrderDate=new DateTime(2020,10,9), ShipCountry="Malysia" },
+                new Order { OrderID=9, CustomerID="6", OrderDate=new DateTime(2020,10,10), ShipCountry="Malysia" },
+                new Order { OrderID=10, CustomerID="6", OrderDate=new DateTime(2020,10,24), ShipCountry="Malysia" },
+                new Order { OrderID=11, CustomerID="6", OrderDate=new DateTime(2020,10,25), ShipCountry="Malysia" },
+                new Order { OrderID=12, CustomerID="6", OrderDate=new DateTime(2020,10,11), ShipCountry="Malysia" },
+                new Order { OrderID=13, CustomerID="7", OrderDate=new DateTime(2020,10,13), ShipCountry="Malysia" },
+                new Order { OrderID=14, CustomerID="7", OrderDate=new DateTime(2020,10,14), ShipCountry="Malysia" },
+                new Order { OrderID=15, CustomerID="8", OrderDate=new DateTime(2020,10,2), ShipCountry="Malysia" },
+                new Order { OrderID=16, CustomerID="9", OrderDate=new DateTime(2020,10,8), ShipCountry="Malysia" },
+                new Order { OrderID=17, CustomerID="10", OrderDate=new DateTime(2020,10,5), ShipCountry="Malysia" },
+                new Order { OrderID=18, CustomerID="10", OrderDate=new DateTime(2020,10,30), ShipCountry="Malysia" },
+                new Order { OrderID=19, CustomerID="11", OrderDate=new DateTime(2020,10,1), ShipCountry="Malysia" },
+                new Order { OrderID=20, CustomerID="11", OrderDate=new DateTime(2020,10,2), ShipCountry="Malysia" },
+                new Order { OrderID=21, CustomerID="11", OrderDate=new DateTime(2020,10,4), ShipCountry="Malysia" }
+            };
+
+
+            foreach (Customer c in customers.OrderBy(c => c.Country))
             {
                 Console.WriteLine(c.Country + ":" + c.Name);
             }
@@ -620,6 +646,65 @@ namespace DelegatesLambdasEvents
                 .Select(t1 => new { t1, discriminant = t1.coef.b * t1.coef.b - 4 * t1.coef.a * t1.coef.c })
                 .Select(t2 => new { t2, twoA = 2 * t2.t1.coef.a })
                 .Select(t3 => new { FirstRoot = (t3.t2.t1.negB + t3.t2.discriminant) / t3.twoA, SecondRoot = (t3.t2.t1.negB - t3.t2.discriminant) / t3.twoA });
+
+
+
+
+
+
+
+            //LINQ Joins
+
+            var customersWithOrders =
+               from c in customers
+               from o in orders
+               where c.CustomerID == o.CustomerID
+               select new { Customer = c, Order = o };
+
+            //Same results using join
+
+            var customersWithOrdersByJoin =
+                from c in customers
+                join o in orders
+                on c.CustomerID equals o.CustomerID
+                select new { c.Name, o.OrderDate };
+
+            //Use extensions method
+            var customersWithOrdersByExtensionMethods =
+                customers.Join(orders, c => c.CustomerID, o => o.CustomerID, (c, o) => new { c.Name, o.OrderDate });
+
+            foreach(var pair in customersWithOrdersByExtensionMethods)
+            {
+                Console.WriteLine("New pair: ");
+                Console.WriteLine(pair.Name+" : "+pair.OrderDate);
+            }
+
+            //LINQ Navigation Property [Entity framework]
+
+            //var firstCustomer = customers.First();
+            //Console.WriteLine("##################    NAVI        #################");
+            //foreach(Order o in firstCustomer.Orders)
+            //{
+            //    Console.WriteLine("\t"+o.OrderDate);
+            //}
+
+
+            //Join and Group
+            var groupedByOrdersOrderedByClients =
+                from c in customers
+                join o in orders
+                    on c.CustomerID equals o.CustomerID into g //this solution creating IEnumerable rather than IGroupable
+                //You can avoid grouping, use into instead
+                group o by c into g
+                let NumOrders = g.Count()
+                orderby NumOrders descending
+                select new { g.Key.Name, NumOrders };
+            foreach(var pair in groupedByOrdersOrderedByClients)
+            {
+                Console.WriteLine(pair.Name + " : " + pair.NumOrders);
+            }
+
+
         }
         static IEnumerable<int> GetRandomNumbers(int count)
         {
